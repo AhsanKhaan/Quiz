@@ -32,7 +32,7 @@ router.post('/create',[auth,createQuestionsValidations],async (request, response
       await question.save();
 
       return response.status(200).json({
-        msg: 'Question inserted Succesfully! in course'+courseType,
+        msg: 'Question inserted Succesfully! in course:  '+courseType,
       });
 
     } catch (error) {
