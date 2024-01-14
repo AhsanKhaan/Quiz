@@ -1,15 +1,34 @@
+const { response } = require('express');
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
 const Question = require('../models/questions');
-const {createQuestionsValidations} =require('./validations/questions');
+const {createQuestionsValidations,getAllQuestions} =require('./validations/questions');
 /**
  * @route GET /api/v1/questions
  * @desc Get all questions
  * @access private
  */
-router.get('/', (req, res) => {
-  res.send('Get all questions');
+router.get('/', [auth,getAllQuestions],async (request, response) => {
+
+  const {courseType}=request.body;
+  let allQuestions;
+  try {
+    allQuestions=await Question.find({courseType}).select('text options');
+
+    if(allQuestions){
+      return response.status(200).send(allQuestions);
+    }else{
+      return response.status(200).json({
+        msg:"This course Don't have Any Questions Yet"
+      });
+    }
+
+
+  } catch (error) {
+    console.error(error.message);
+    response.status(500).json({ msg: error.message });
+  }
 });
 
 /**

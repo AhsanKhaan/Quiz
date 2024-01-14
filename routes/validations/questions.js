@@ -17,6 +17,19 @@ const createQuestionsValidations = [
     }
 ];
 
+const getAllQuestions=[
+    check('courseType').notEmpty().withMessage('Course type is required.'),
+    check('courseType').isString().withMessage('Course type Must be a valid String!'),
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        next();
+    }
+];
+
 module.exports ={
-    createQuestionsValidations
+    createQuestionsValidations,
+    getAllQuestions
 }
