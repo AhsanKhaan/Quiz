@@ -12,7 +12,7 @@ connectDB();
 // routes
 app.use('/api/v1/users', require('./routes/users'));
 app.use('/api/v1/auth', require('./routes/auth'));
-app.use('/api/v1/contacts/', require('./routes/contacts'));
+app.use('/api/v1/questions', require('./routes/questions'));
 
 // port
 const PORT = process.env.PORT || 8080;
