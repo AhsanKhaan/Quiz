@@ -9,13 +9,13 @@ const router = express.Router();
 const User = require('../models/users');
 
 /**
- * @route GET /api/v1/auth/users/:id
+ * @route GET /api/v1/auth/users
  * @desc Get logged in data
  * @access private
  */
-router.get('/users/:id', auth, async (req, res) => {
+router.get('/users', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.id).select('-password');
+    const user = await User.findById(req.user.id);
     return res.json(user);
   } catch (err) {
     console.error(err.message);

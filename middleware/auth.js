@@ -5,7 +5,7 @@ module.exports = function (req, res, next) {
 
   if (!token) {
     res.status(401).json({
-      msg: 'Authorization denied!',
+      msg: 'Authorization denied!!!',
     });
   }
 
