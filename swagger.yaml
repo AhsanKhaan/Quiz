@@ -1,0 +1,9 @@
+openapi: 3.0.0
+info:
+    title: 'Quiz Application'
+    version: 1.0.0
+    description: 'API documentation for your Node.js application'
+basePath: /
+paths: {}
+components: {}
+tags: []
