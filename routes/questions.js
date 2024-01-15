@@ -91,7 +91,9 @@ router.post('/check-answers', auth, async (request, response) => {
       const question = allQuestions.find(q => q.id === userResponse.questionId);
 
       if (!question) {
-        return response.status(400).json({ msg: 'Invalid question ID in user response' });
+        return response.status(400).json({ msg: 'Invalid question ID in user response',
+                                           data: userResponse.questionId
+                                         });
       }
       console.log('pou', userResponse.selectedOptions);
       console.log('poioiou', question);
