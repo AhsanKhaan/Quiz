@@ -7,11 +7,64 @@ const router = express.Router();
 
 const User = require('../models/users');
 
+
 /**
- * @route POST /api/v1/users/signup
- * @desc Create a new user
- * @access public
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: User Signup and Login
  */
+/**
+ * @swagger
+ * /api/v1/users/signup:
+ *   post:
+ *     summary: User SignUp
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: User's full name
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: User's email address
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: User's password (at least 6 characters)
+ *     responses:
+ *       200:
+ *         description: Successful signup
+ *         content:
+ *           application/json:
+ *             example:
+ *               token: <JWT_TOKEN>
+ *       400:
+ *         description: Bad request (validation errors)
+ *         content:
+ *           application/json:
+ *             example:
+ *               errors: [{ msg: 'Please enter your full name.' }, { msg: 'Please enter your email address.' }, { msg: 'Please insert at least 6 characters.' }]
+ *       409:
+ *         description: Conflict (user already exists)
+ *         content:
+ *           application/json:
+ *             example:
+ *               msg: 'User already exists'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               msg: 'Server error'
+ */
+
 router.post(
   '/signup',
   [
@@ -75,9 +128,51 @@ router.post(
   }
 );
 /**
- * @route POST /api/v1/users/login
- * @desc log in user
- * @access public
+ *  @swagger
+ * /api/v1/users/login:
+ *   post:
+ *     summary: User login
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: User's email address
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: User's password (at least 6 characters)
+ *     responses:
+ *       200:
+ *         description: Successful login
+ *         content:
+ *           application/json:
+ *             example:
+ *               token: <JWT_TOKEN>
+ *       400:
+ *         description: Bad request (validation errors)
+ *         content:
+ *           application/json:
+ *             example:
+ *               errors: [{ msg: 'Please enter your email address.' }, { msg: 'Please insert at least 6 characters.' }]
+ *       409:
+ *         description:  Bad request ( user not exists)
+ *         content:
+ *           application/json:
+ *             example:
+ *               msg: 'User Not exists'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               msg: 'Server error'
  */
  router.post(
   '/login',
@@ -98,7 +193,7 @@ router.post(
       const user = await User.findOne({ email });
 
       if (!user) {
-        return res.status(400).json({
+        return res.status(409).json({
           msg: 'User not exists.',
         });
       }
