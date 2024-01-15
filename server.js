@@ -16,7 +16,7 @@ app.use('/api/v1/auth', require('./routes/auth'));
 app.use('/api/v1/questions', require('./routes/questions'));
 
 // Swagger setup
-app.use('/api-docs', swaggerSetup);
+swaggerSetup(app);
 
 // port
 const PORT = process.env.PORT || 8080;

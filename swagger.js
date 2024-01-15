@@ -27,6 +27,6 @@ const swaggerSpec = swaggerJSDoc(options);
 const swaggerYamlFile = 'swagger.yaml';
 fs.writeFileSync(swaggerYamlFile, YAML.stringify(swaggerSpec));
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-module.exports = app;
+module.exports = (app) => {
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+};

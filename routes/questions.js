@@ -4,11 +4,34 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const Question = require('../models/questions');
 const UserResponse = require('../models/UserResponse');
-const { createQuestionsValidations, getAllQuestions } = require('./validations/questions');
+const { createQuestionsValidations, getAllQuestions } = require('../validations/questions');
 /**
- * @route GET /api/v1/questions
- * @desc Get all questions
- * @access private
+ * @swagger
+ * tags:
+ *   name: Questions
+ *   description: API operations related to questions
+ */
+
+/**
+ * @swagger
+ * /api/v1/questions:
+ *   get:
+ *     summary: Get all questions
+ *     tags: [Questions]
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               questions: [{ text: "What is your question?", options: [...] }]
+ *               totalCount: 10
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
  */
 router.get('/', [auth, getAllQuestions], async (request, response) => {
 
@@ -37,10 +60,35 @@ router.get('/', [auth, getAllQuestions], async (request, response) => {
 });
 
 /**
- * @route POST /api/v1/questions
- * @desc Create a new questions
- * @access private
+ * @swagger
+ * /api/v1/questions/create:
+ *   post:
+ *     summary: Create a new question
+ *     tags: [Questions]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           example:
+ *             text: "What is your question?"
+ *             options: [{ id: 1, text: "Option 1" }, { id: 2, text: "Option 2" }]
+ *             correctOption: [1]
+ *             courseType: "Math"
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               msg: "Question inserted Successfully! in course: Math"
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Internal server error
  */
+
 router.post('/create', [auth, createQuestionsValidations], async (request, response, next) => {
   const { text, courseType } = request.body;
 
@@ -69,9 +117,34 @@ router.post('/create', [auth, createQuestionsValidations], async (request, respo
 });
 
 /**
- * @route POST /api/v1/questions/check-answers
- * @desc Check Questions
- * @access private
+ * @swagger
+ * /api/v1/questions/check-answers:
+ *   post:
+ *     summary: Check user answers
+ *     tags: [Questions]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           example:
+ *             userResponses: [{ questionId: "123", selectedOptions: [1] }]
+ *             courseType: "Math"
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               Obtain: 20
+ *               Total: 30
+ *               percentage: 66.67%
+ *               Remarks: "Good!"
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Internal server error
  */
 router.post('/check-answers', auth, async (request, response) => {
   const userId = request.user.id; // Assuming you're using authentication middleware to get user details
@@ -95,8 +168,6 @@ router.post('/check-answers', auth, async (request, response) => {
                                            data: userResponse.questionId
                                          });
       }
-      console.log('pou', userResponse.selectedOptions);
-      console.log('poioiou', question);
       // Check if the user's selected options match the correct options
       const isCorrect = JSON.stringify(userResponse.selectedOption.sort()) === JSON.stringify(question.correctOption.sort());
 
@@ -130,15 +201,6 @@ router.post('/check-answers', auth, async (request, response) => {
     console.error(error.message);
     response.status(500).json({ msg: 'Server error' });
   }
-});
-
-/**
- * @route Delete /api/v1/questions/:id
- * @desc Delete question by id
- * @access private
- */
-router.delete('/:id', (req, res) => {
-  res.send('Delete question by ID');
 });
 
 module.exports = router;

@@ -9,9 +9,35 @@ const router = express.Router();
 const User = require('../models/users');
 
 /**
- * @route GET /api/v1/auth/users
- * @desc Get logged in data
- * @access private
+ * @swagger
+ * tags:
+ *   name: Authentication
+ *   description: User authentication and profile retrieval
+ */
+
+/**
+ * @swagger
+ * /api/v1/auth/users:
+ *   get:
+ *     summary: Get logged-in user data
+ *     tags: [Authentication]
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               _id: '603ddca3fd6e1d396055bee0'
+ *               name: 'John Doe'
+ *               email: 'john@example.com'
+ *               createdAt: '2022-02-01T10:00:00.000Z'
+ *               updatedAt: '2022-02-01T12:00:00.000Z'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
  */
 router.get('/users', auth, async (req, res) => {
   try {
