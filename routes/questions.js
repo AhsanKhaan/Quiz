@@ -15,25 +15,30 @@ const { createQuestionsValidations, getAllQuestions } = require('../validations/
 /**
  * @swagger
  * /api/v1/questions:
- *   get:
+ *   post:
  *     summary: Get all questions
  *     tags: [Questions]
  *     security:
- *       - BearerAuth: []
+ *      - Auth: []
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          example:
+ *            courseType: "Math" 
  *     responses:
  *       200:
  *         description: Successful response
  *         content:
  *           application/json:
  *             example:
- *               questions: [{ text: "What is your question?", options: [...] }]
- *               totalCount: 10
+ *               courseType: "JavaScript"
  *       401:
  *         description: Unauthorized
  *       500:
  *         description: Internal server error
  */
-router.get('/', [auth, getAllQuestions], async (request, response) => {
+router.post('/', [auth, getAllQuestions], async (request, response) => {
 
   const { courseType } = request.body;
   let allQuestions;
@@ -66,7 +71,7 @@ router.get('/', [auth, getAllQuestions], async (request, response) => {
  *     summary: Create a new question
  *     tags: [Questions]
  *     security:
- *       - BearerAuth: []
+ *      - Auth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -123,14 +128,14 @@ router.post('/create', [auth, createQuestionsValidations], async (request, respo
  *     summary: Check user answers
  *     tags: [Questions]
  *     security:
- *       - BearerAuth: []
+ *       - Auth: []
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           example:
- *             userResponses: [{ questionId: "123", selectedOptions: [1] }]
- *             courseType: "Math"
+ *             userResponses: [     {"questionId": "65a43d1d04d35abcab3dfdd6","selectedOption": [2]},{"questionId": "65a43ee404d35abcab3dfddb","selectedOption": [1]},{"questionId": "65a43f6c2953168806b1ecde","selectedOption": [1]},{"questionId": "65a43fe243610fb88a8f87b9","selectedOption": [1]},{"questionId": "65a4408043610fb88a8f87c0","selectedOption": [4]}]
+ *             courseType: "JavaScript"
  *     responses:
  *       200:
  *         description: Successful response

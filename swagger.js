@@ -13,6 +13,20 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'API documentation for your Node.js application',
   },
+  components: {
+    securitySchemes: {
+      Auth: {
+        type: 'apiKey',
+        in: 'header',
+        name: 'Authorization',
+      },
+    },
+  },
+  security: [
+    {
+      Auth: [],
+    },
+  ],
   basePath: '/',
 };
 
