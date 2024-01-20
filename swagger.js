@@ -38,8 +38,8 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 // Save the Swagger definition to a YAML file
-const swaggerYamlFile = 'swagger.yaml';
-fs.writeFileSync(swaggerYamlFile, YAML.stringify(swaggerSpec));
+//const swaggerYamlFile = 'swagger.yaml';
+//fs.writeFileSync(swaggerYamlFile, YAML.stringify(swaggerSpec));
 
 module.exports = (app) => {
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
